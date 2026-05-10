@@ -29,7 +29,7 @@ genero VARCHAR (25) NOT NULL
 );
 
 CREATE TABLE presenta (
-id INT PRIMARY KEY,
+id INT PRIMARY KEY AUTO_INCREMENT,
 id_artista VARCHAR (25),
 id_concierto VARCHAR (25),
 orden INT,
