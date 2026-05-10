@@ -1,0 +1,49 @@
+
+Consultas complejas:
+
+πnombre,nombre_concierto,nombre_artistico(σgenero!='pop'(ρid➡id_artista(artista)⋈ρid➡id_presenta(presenta)⋈(ρ id➡id_concierto,nombre➡nombre_concierto(concierto))⋈ρid_boleto➡numero(persona)⋈boleto))
+//todas las personas que hayan asistido a conciertos que no sean pop 
+
+select persona.nombre, concierto.nombre, concierto.lugar, artista.nombre_artistico, artista.genero from persona
+join boleto on boleto.numero = persona.id_boleto
+join concierto on concierto.id = boleto.id_concierto
+join presenta on presenta.id_concierto = concierto.id
+join artista on artista.id = presenta.id_artista
+where artista.genero != 'Pop';
+
+πnombre,id_boleto,precio(σprecio>50.00(ρnumero➡id_boleto(boleto)⋈persona⋈ρid➡Id_tipo_boleto,nombre➡nombre_tipo_boleto(tipo_boleto)))
+//listar el numero de boleto nombre de la persona y precio de los boletos que cuestan mas de 50 dolares 
+
+select boleto.numero, persona.nombre, tipo_boleto.precio from boleto
+join persona on persona.id_boleto = boleto.numero
+join tipo_boleto on tipo_boleto.id = boleto.Id_tipo_boleto
+where tipo_boleto.precio>50.00;
+
+
+σlugar== 'Brasil'(ρid➡id_concierto(concierto)⋈presenta⋈ρid➡id_artista(artista))
+//mostrar los artistas que se presentan en brasil
+
+select artista.nombre_artistico,concierto.nombre,concierto.lugar from concierto
+join presenta on concierto.id = presenta.id_concierto
+join artista on artista.id = presenta.id_artista
+where concierto.lugar = 'Brasil';
+
+
+πnombre,lugar,nombre_artistico,orden(σ(orden == 1 or orden==2)(ρid➡id_concierto(concierto)⋈presenta⋈ρid➡id_artista(artista)))
+//concierto los artistas y el lugar de los que se presentaron primeros o segundos en un  concierto
+
+select concierto.nombre, concierto.lugar, artista.nombre_artistico, presenta.orden from concierto
+join presenta on concierto.id = presenta.id_concierto
+join artista on artista.id = presenta.id_artista
+where presenta.orden = 1 or presenta.orden = 2;
+
+πnombre,nombre_concierto,nombre_artistico(σgenero=='pop'(ρid➡id_artista(artista)⋈ρid➡id_presenta(presenta)⋈(ρ id➡id_concierto,nombre➡nombre_concierto(concierto))⋈ρid_boleto➡numero(persona)⋈boleto)) 
+//todas las personas que han asistido a un concierto de pop 
+
+select persona.nombre, concierto.nombre, concierto.lugar, artista.nombre_artistico, artista.genero from persona
+join boleto on boleto.numero = persona.id_boleto
+join concierto on concierto.id = boleto.id_concierto
+join presenta on presenta.id_concierto = concierto.id
+join artista on artista.id = presenta.id_artista
+where artista.genero = 'Pop';
+
